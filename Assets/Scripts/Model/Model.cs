@@ -12,17 +12,22 @@ public class Model
     public Action<int> ChangedPort { get; set; }
     public Action<string> ChangedVideoStreamAddress { get; set; }
     public Action<float> ChangedOdometerValue { get; set; }
+    public Action<Texture2D> ChangeVideoFrame { get; set; }
+    public Action<bool> MuteMusic { get; set; }
 
     private NetworkData _networkData;
     private LocalData _localData;
+    private VideoStreamData _videoStream;
 
-    public Model(NetworkData networkData, LocalData localData)
+    public Model(NetworkData networkData, LocalData localData, VideoStreamData videoStream)
     {
         _localData = localData;
         _localData.SetDataPath(Application.persistentDataPath);
 
         _networkData = networkData;
         _networkData.CreateConnect(_localData.ServerIP, _localData.ServerPort);
+
+        _videoStream = videoStream;
 
         Initialization();
     }
@@ -31,6 +36,9 @@ public class Model
     {
         _networkData.ChangedOdometerValue += (f) => ChangedOdometerValue?.Invoke(f);
         _networkData.ChangedConnectedServerStatus += (b) => ChangedConnectedServerStatus?.Invoke(b);
+        
+        _videoStream.ChangeVideoFrame += (t) => ChangeVideoFrame?.Invoke(t);
+        _videoStream.MuteMusic += (b) => MuteMusic?.Invoke(b);
     }
 
     public void UpdateAllValue()
@@ -44,6 +52,8 @@ public class Model
 
         ChangedConnectedServerStatus?.Invoke(_networkData.ServerIsConnected);
         ChangedOdometerValue?.Invoke(_networkData.OdometerValue);
+
+        ChangeVideoFrame?.Invoke(_videoStream.CurrentTexture);
     }
 
     public void SetVolume(float volume)
@@ -91,4 +101,19 @@ public class Model
         _localData.VideoAddress = uri;
         ChangedVideoStreamAddress?.Invoke(_localData.VideoAddress);
     }
+
+    public void ChangeStreamVideoState(bool state)
+    {
+        if (state)
+        {
+            _videoStream.Play();
+        }
+        else
+        {
+            _videoStream.Pause();
+        }
+        
+    }
+
+    
 }

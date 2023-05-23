@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class ViewModel
 {
@@ -10,6 +11,8 @@ public class ViewModel
     public Action<string> ChangedPort { get; set; }
     public Action<string> ChangedVideoStreamAddress { get; set; }
     public Action<float> ChangedOdometerValue { get; set; }
+    public Action<Texture2D> ChangeVideoFrame { get; set; }
+    public Action<bool> MuteMusic { get; set; }
     public Action Click { get; set; }
 
     private Model _model;
@@ -27,6 +30,9 @@ public class ViewModel
         _model.ChangedPort += (i) => ChangedPort?.Invoke(i.ToString("0000"));
         _model.ChangedVideoStreamAddress += (s) => ChangedVideoStreamAddress?.Invoke(s);
         _model.ChangedOdometerValue += (f) => ChangedOdometerValue?.Invoke(f);
+
+        _model.ChangeVideoFrame += (t) => ChangeVideoFrame?.Invoke(t);
+        _model.MuteMusic += (b) => MuteMusic?.Invoke(b);
     }
 
     public void UpdateAllValue()
@@ -67,6 +73,12 @@ public class ViewModel
     public void ChangeVideoStreamAddress(string uri)
     {
         _model.SetVideoStreamAddress(uri);
+        OnClick();
+    }
+
+    public void ChangeStreamVideoState(bool state)
+    {
+        _model.ChangeStreamVideoState(state);
         OnClick();
     }
 

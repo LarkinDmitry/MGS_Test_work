@@ -8,7 +8,8 @@ public class AudioView : MonoBehaviour, IView
     [SerializeField] private AudioMixerGroup Effects;
 
     private ViewModel _viewModel;
-
+    private bool currentMusicState;
+    private bool muteMusic = false;
     private AudioSource tap;
     private AudioSource backgroundMusic;
 
@@ -34,6 +35,7 @@ public class AudioView : MonoBehaviour, IView
         _viewModel.ChangedVolumeValue += SetVolume;
         _viewModel.ChangedMusicActiveState += SetMusicActiveState;
         _viewModel.ChangedEffectsActiveState += SetEffectsActiveState;
+        _viewModel.MuteMusic += MuteMusic;
         _viewModel.Click += Click;
 
         _viewModel.UpdateAllValue();
@@ -49,8 +51,19 @@ public class AudioView : MonoBehaviour, IView
         Mixer.SetFloat("Master", ConvertToDecibel(volume));
     }
 
+    private void MuteMusic(bool active)
+    {
+        muteMusic = active;
+        
+        float vol = currentMusicState ? 1 : 0;
+        Mixer.SetFloat("Music", ConvertToDecibel(active ? 0 : vol));
+    }
+
     private void SetMusicActiveState(bool active)
     {
+        currentMusicState = active;
+
+        if (muteMusic) return;
         Mixer.SetFloat("Music", ConvertToDecibel(active ? 1 : 0));
     }
 

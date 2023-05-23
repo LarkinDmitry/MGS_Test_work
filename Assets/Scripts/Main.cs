@@ -16,7 +16,9 @@ public class Main : MonoBehaviour
 
         NetworkData nwData = GetComponent<NetworkData>();
         LocalData lcData = GetComponent<LocalData>();
-        _model = new(nwData, lcData);
+        VideoStreamData vsData = GetComponent<VideoStreamData>();
+
+        _model = new(nwData, lcData, vsData);
 
         _viewModel = new(_model);
 

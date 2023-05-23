@@ -13,7 +13,7 @@ public class UIView : MonoBehaviour, IView
     private Button _videoBtn;
 
     private VisualElement _settingsContainer;
-    private bool settingContainerActiveState;
+    private bool _settingContainerActiveState;
     private Toggle _music;
     private Toggle _effects;
     private Slider _volume;
@@ -23,7 +23,7 @@ public class UIView : MonoBehaviour, IView
 
     private Label _odometerValue;
 
-    private bool videoContainerActiveState;
+    private bool _videoContainerActiveState;
     private VisualElement _videoPanel;
 
     private readonly float openCloseWindowTimeSecond = 0.3f;
@@ -66,11 +66,12 @@ public class UIView : MonoBehaviour, IView
         _viewModel.ChangedPort += (s) => _serverPort.value = s;
         _viewModel.ChangedVideoStreamAddress += (s) => _videoStreamAddress.value = s;
         _viewModel.ChangedOdometerValue += (f) => TryOdometerValue = f;
-
+        _viewModel.ChangeVideoFrame += SetVideoTexture;
+                
         _viewModel.UpdateAllValue();
 
-        _menuBtn.clicked += () => ChangeSettingsWindowActiveState(!settingContainerActiveState);
-        _videoBtn.clicked += () => ChangeVideoPanelActiveState(!videoContainerActiveState);
+        _menuBtn.clicked += () => ChangeSettingsWindowActiveState(!_settingContainerActiveState);
+        _videoBtn.clicked += () => ChangeVideoPanelActiveState(!_videoContainerActiveState);
         _music.RegisterValueChangedCallback((evt) => _viewModel.ChangeMusicState(evt.newValue));
         _effects.RegisterValueChangedCallback((evt) => _viewModel.ChangeEffectsState(evt.newValue));
         _volume.RegisterValueChangedCallback((evt) => _viewModel.ChangeVolume(evt.newValue));        
@@ -79,12 +80,13 @@ public class UIView : MonoBehaviour, IView
         _videoStreamAddress.RegisterValueChangedCallback((evt) => _viewModel.ChangeVideoStreamAddress(evt.newValue));
 
         _menuBtn.clicked += () => _viewModel.OnClick();
-        _videoBtn.clicked += () => _viewModel.OnClick();
+
+        
     }
 
     private async void ChangeSettingsWindowActiveState(bool state)
     {
-        settingContainerActiveState = state;
+        _settingContainerActiveState = state;
         _menuBtn.text = state ? "Close menu" : "Open menu";
 
         _settingsContainer.style.opacity = state ? 1 : 0;
@@ -98,10 +100,14 @@ public class UIView : MonoBehaviour, IView
     private void ChangeVideoPanelActiveState(bool state)
     {
         _videoBtn.text = state ? "Stop video" : "Start video";
+        _videoPanel.style.unityBackgroundScaleMode = state? ScaleMode.ScaleToFit : ScaleMode.ScaleAndCrop;
+        _videoContainerActiveState = state;
+        _viewModel?.ChangeStreamVideoState(state);
+    }
 
-        _videoPanel.style.backgroundColor = state ? Color.blue : Color.black;
-
-        videoContainerActiveState = state;
+    private void SetVideoTexture(Texture2D texture)
+    {
+        _videoPanel.style.backgroundImage = texture;
     }
 
     private void ShowServerStatus(bool status)
