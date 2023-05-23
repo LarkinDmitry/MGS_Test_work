@@ -1,0 +1,28 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Styles.uss?fileID=7433441132597879392&amp;guid=aaf824494dd80bb428dae68c4d83ef9a&amp;type=3#Styles" />
+    <ui:VisualElement name="MainContainer" style="background-color: rgb(142, 142, 142); -unity-font-definition: initial; -unity-font: resource(&apos;Fonts/SpaceMono-Regular&apos;); padding-left: 5px; padding-right: 5px; flex-grow: 1;">
+        <ui:VisualElement name="UpContainer" class="container" style="flex-direction: row; height: 60px;">
+            <ui:VisualElement name="ServerConnectIndicator" class="connectIndicator borders">
+                <ui:Label text="Disconnect" display-tooltip-when-elided="true" name="Info" />
+            </ui:VisualElement>
+            <ui:Button text="Start video" display-tooltip-when-elided="true" name="Video" class="button borders" />
+            <ui:Button text="Open menu" display-tooltip-when-elided="true" name="Menu" class="button borders" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Odometer" class="odometr borders">
+            <ui:Label text="00000000000.00" display-tooltip-when-elided="true" name="OdometerValue" style="font-size: 50px; -unity-text-align: middle-center; -unity-font: resource(&apos;Fonts/SpaceMono-Regular&apos;);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="VideoPanel" class="video container borders">
+            <ui:VisualElement name="SettingContainer" class="borders" style="background-color: rgb(120, 120, 120); position: absolute; top: 50%; translate: -50% -50%; left: 50%; width: 550px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+                <ui:Label text="Menu" display-tooltip-when-elided="true" name="Header" class="borders" style="-unity-text-align: middle-center; background-color: rgb(43, 41, 41); height: 40px; font-size: 25px; color: rgb(255, 255, 255);" />
+                <ui:VisualElement name="Toggles" style="justify-content: space-between; height: 40px; align-items: center; flex-direction: row;">
+                    <ui:Toggle label="Effects" name="Effects" />
+                    <ui:Toggle label="Music" name="Music" />
+                </ui:VisualElement>
+                <ui:Slider label="Volume" picking-mode="Ignore" name="Volume" high-value="1" low-value="0" style="height: 40px;" />
+                <ui:TextField picking-mode="Ignore" label="Server IP address" name="ServerAddress" is-delayed="true" style="height: 40px;" />
+                <ui:TextField picking-mode="Ignore" label="Port number" name="PortNumber" is-delayed="true" style="height: 40px;" />
+                <ui:TextField picking-mode="Ignore" label="Video stream address" name="VideoStreamAddress" is-delayed="true" style="height: 40px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
