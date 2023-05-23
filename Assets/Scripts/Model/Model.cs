@@ -111,9 +111,6 @@ public class Model
         else
         {
             _videoStream.Pause();
-        }
-        
+        }        
     }
-
-    
 }
